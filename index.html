@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Tracking</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        input { padding: 10px; font-size: 16px; width: 200px; }
+        button { padding: 10px 20px; font-size: 16px; margin-top: 10px; cursor: pointer; }
+        .popup { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black; box-shadow: 0px 0px 10px gray; }
+    </style>
+</head>
+<body>
+    <h2>Track Your Vehicle</h2>
+    <label for="license">Vehicle License Plate No:</label>
+    <input type="text" id="license" value="" />
+    <br>
+    <button onclick="checkVehicle()">Confirm</button>
+    
+    <div id="popup" class="popup">
+        <p id="popupText"></p>
+        <button onclick="closePopup()">OK</button>
+    </div>
+
+    <script>
+        // Hardcoded job card and vehicle details
+        const jobCardNumber = "1011000001";
+        const vehicleData = {
+            "10/10000": {
+                owner: "xxxxxxxxxx",
+                vin: "xxxxxxxxxxxxx",
+                advisor: "xxxxxxxxxx",
+                contact: "00000000",
+                status: "Vehicle is ready to be received by customer"
+            }
+        };
+
+        // Fetch job card number from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("jobcard") === jobCardNumber) {
+            document.getElementById("license").value = "10/10000";
+        }
+
+        function checkVehicle() {
+            const licensePlate = document.getElementById("license").value;
+            const popup = document.getElementById("popup");
+            const popupText = document.getElementById("popupText");
+            
+            if (vehicleData[licensePlate]) {
+                const vehicle = vehicleData[licensePlate];
+                popupText.innerHTML = `
+                    <strong>Vehicle Owner:</strong> ${vehicle.owner} <br>
+                    <strong>Vehicle License Plate No:</strong> ${licensePlate} <br>
+                    <strong>Vehicle VIN No:</strong> ${vehicle.vin} <br>
+                    <strong>Service Advisor:</strong> ${vehicle.advisor} <br>
+                    <strong>Contact No:</strong> ${vehicle.contact} <br>
+                    <strong>Status:</strong> ${vehicle.status}
+                `;
+            } else {
+                popupText.innerHTML = "Sorry, your vehicle is not found.";
+            }
+            popup.style.display = "block";
+        }
+
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+    </script>
+</body>
+</html>
