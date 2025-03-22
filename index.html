@@ -3,62 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Tracking System</title>
+    <title>Vehicle Tracking</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 50px;
-            background-color: #f4f4f4;
         }
-        h2 {
-            color: #333;
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
         }
-        input {
-            padding: 10px;
-            width: 250px;
-            margin: 10px;
-            border: 1px solid #aaa;
-            border-radius: 5px;
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        button {
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
+        .close {
+            color: red;
+            float: right;
+            font-size: 24px;
             cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #218838;
         }
     </style>
 </head>
 <body>
-
     <h2>Vehicle Tracking System</h2>
     <label for="licensePlate">Enter License Plate Number:</label>
     <input type="text" id="licensePlate">
     <button onclick="confirmVehicle()">Confirm</button>
-
+    
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Vehicle Information</h3>
+            <p id="modalText"></p>
+        </div>
+    </div>
+    
     <script>
-        // Predefined vehicle data
         const vehicles = {
-            "10/10000": { jobcard: "1011000000", owner: "John Doe", vin: "1HGCM82633A123456", advisor: "Michael Scott", contact: "9876543210", status: "Vehicle is ready to be received by customer" },
-            "10/10001": { jobcard: "1011000001", owner: "Jane Smith", vin: "2T1BURHE3JC123457", advisor: "Dwight Schrute", contact: "8765432109", status: "Vehicle is under diagnosis" },
-            "10/10002": { jobcard: "1011000002", owner: "Alice Johnson", vin: "3VWFE21C04M123458", advisor: "Pam Beesly", contact: "7654321098", status: "Vehicle report is ready" },
-            "10/10003": { jobcard: "1011000003", owner: "Bob Brown", vin: "5NPDH4AE6DH123459", advisor: "Jim Halpert", contact: "6543210987", status: "Vehicle is undergoing repairs" }
+            "10/10000": { jobcard: "1011000000", status: "Vehicle is ready to be received by customer" },
+            "10/10001": { jobcard: "1011000001", status: "Vehicle is under diagnosis" },
+            "10/10002": { jobcard: "1011000002", status: "Vehicle report is ready" },
+            "10/10003": { jobcard: "1011000003", status: "Vehicle is undergoing repairs" }
         };
 
         function confirmVehicle() {
             const plateNumber = document.getElementById("licensePlate").value.trim();
+            const modal = document.getElementById("myModal");
+            const modalText = document.getElementById("modalText");
+
             if (plateNumber in vehicles) {
-                alert(`Jobcard Number: ${vehicles[plateNumber].jobcard}\nVehicle Owner: ${vehicles[plateNumber].owner}\nVIN Number: ${vehicles[plateNumber].vin}\nService Advisor: ${vehicles[plateNumber].advisor}\nContact Number: ${vehicles[plateNumber].contact}\nStatus: ${vehicles[plateNumber].status}`);
+                modalText.innerHTML = `<strong>Jobcard Number:</strong> ${vehicles[plateNumber].jobcard}<br>
+                                       <strong>Vehicle License Plate:</strong> ${plateNumber}<br>
+                                       <strong>Status:</strong> ${vehicles[plateNumber].status}`;
             } else {
-                alert("Sorry, your vehicle is not found.");
+                modalText.innerHTML = "<strong>Sorry, your vehicle is not found.</strong>";
             }
+            modal.style.display = "block";
+        }
+        
+        function closeModal() {
+            document.getElementById("myModal").style.display = "none";
         }
     </script>
-
 </body>
 </html>
